@@ -1,0 +1,19 @@
+{% extends "resources/templates/layout.html" %}
+{% block title %}
+Register
+{% endblock %}
+{% block content %}
+{{msg}}
+<form action = "{{ url_for('Register') }}" method = "POST">
+    <h3>Registration Form</h3>
+    email<br>
+    <input type = "text" name = "email" /></br>
+    phone number<br>
+    <input type = "text" name = "phone_number" /><br>  
+    name<br>
+    <input type = "text" name = "name" /><br>
+    password<br>
+    <input type = "text" name = "password" /><br>
+    <input type = "submit" value = "submit" /><br>
+ </form>
+{% endblock %}

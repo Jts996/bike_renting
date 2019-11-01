@@ -1,0 +1,8 @@
+added database for project kick off
+Added project on flask framework, for further development on database and ui integration. with flexibility testing on
+-sqlite integration
+-web page navigation
+-http post communication
+-ajax json post communication
+Added user session handling & operator pages codes for reference
+Fixed bug on lat long which should be in float instead of integer
