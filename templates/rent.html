@@ -7,7 +7,9 @@
     <link href="../static/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
 
     <link href="../static/css/navbar.css" rel="stylesheet">
-    <link href="../static/css/rental.css" rel="stylesheet">
+    <link href="../static/css/rentbike.css" rel="stylesheet">
+
+
 </head>
 <body>
 
@@ -34,7 +36,14 @@
         </div>
     </header>
 
-
+     <div class="container" id="container">
+        <center>
+        <h3 id="popUpMessage"></h3>
+        <h1> THANK YOU </h1>
+        <button id="out">OK</button>
+        </center>
+    </div>
+    <div class="fade" id="fade"></div>
 
     <section class="rental-map" >
         <h2>Rent</h2>
@@ -50,7 +59,7 @@
             <h2>Rent a Bike</h2>
             <div class="bike-form">
                 <input id="bike-id-rent" type="text" placeholder="Bike ID Number">
-                <button id="rent-bike">Rent</button>
+                <button id="rent-bike" class="btn">Rent</button>
             </div>
 
         </div>
@@ -130,7 +139,7 @@
 
 
     </script>
-
+    <script src="../static/js/rentbike.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmoXHtBb8SuFv_OGlfuwKmTAFKKITUkQI&callback=initMap"></script>
 
