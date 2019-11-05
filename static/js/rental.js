@@ -27,6 +27,12 @@ $( "#rent-bike" ).click(function( event ) {
         success: function(data){alert(data.retstatus) ;
             $('#order-id-return').val(data.orderid);
             $('#bike-id-return').val($('#bike-id-rent').val());
+            var form = $('<form action="' + '/Rent' + '" method="post">' +
+            '<input type="text" name="orderid" value="' + $('#order-id-return').val() + '" />' +
+            '<input type="text" name="bikeid" value="' + $('#bike-id-return').val() + '" />' +
+            '</form>');
+            $('body').append(form);
+            form.submit();
         },
         contentType: "application/json",
         dataType: 'json'
@@ -46,7 +52,13 @@ $( "#return-bike" ).click(function( event ) {
         success: function(data){alert(data.retstatus + ' deducted amount: ' + data.amount) ;
             $('#order-id-return').val('');
             $('#bike-id-return').val('');
-            $('#bike-id-rent').val('')
+            $('#bike-id-rent').val('');
+            var form = $('<form action="' + '/Rent' + '" method="post">' +
+            '<input type="text" name="orderid" value="' + $('#order-id-return').val() + '" />' +
+            '<input type="text" name="bikeid" value="' + $('#bike-id-return').val() + '" />' +
+            '</form>');
+            $('body').append(form);
+            form.submit();            
         },
         contentType: "application/json",
         dataType: 'json'

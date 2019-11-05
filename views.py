@@ -99,7 +99,7 @@ def closeuseraccount():
 @app.route("/api/doregistration", methods=['POST'])
 def doregistration():
     data =request.get_json()
-    ret = mydb.createUser(1,data['email'],data['fname'],data['lname'],data['password'])
+    ret = mydb.createUser(data['email'],data['fname'],data['lname'],data['password'])
     if ret == False:
         output="Registration faiiled"
     else:
@@ -108,12 +108,23 @@ def doregistration():
     return res
 
 
-@app.route("/Rent")
+@app.route("/Rent", methods=['POST','GET'])
 def rent():
-    if 'user_session' in session: #check user login before or not
-        return render_template("rent.html")
+    if request.method=='POST':
+        orderid=request.form['orderid']
+        bikeid=request.form['bikeid']
+
+        if 'user_session' in session: #check user login before or not
+            (tkbike_id, tkbike_loc) = mydb.trackbikes(True)
+            return render_template("rent.html",tkbikeid=tkbike_id, tkbikeloc=tkbike_loc,orderid=orderid,bikeid=bikeid)
+        else:
+            return redirect(url_for('login'))
     else:
-        return redirect(url_for('login'))
+        if 'user_session' in session: #check user login before or not
+            (tkbike_id, tkbike_loc) = mydb.trackbikes(True)
+            return render_template("rent.html",tkbikeid=tkbike_id, tkbikeloc=tkbike_loc,orderid='',bikeid='')
+        else:
+            return redirect(url_for('login'))
 
 
 @app.route("/api/report_defect", methods=['POST'])

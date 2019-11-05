@@ -7,7 +7,7 @@
     <link href="../static/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
 
     <link href="../static/css/navbar.css" rel="stylesheet">
-    <link href="../static/css/rentbike.css" rel="stylesheet">
+    <link href="../static/css/rental.css" rel="stylesheet">
 
 
 </head>
@@ -66,8 +66,8 @@
         <div class="widget">
             <h2>Return your Bike</h2>
             <div class="bike-form">
-                <input id="order-id-return" hidden type="text" placeholder="Defect Category">
-                <input id="bike-id-return" type="text" readonly  placeholder="Bike ID Number">
+                <input id="order-id-return" hidden type="text" value= "{{orderid}}" placeholder="Defect Category">
+                <input id="bike-id-return" type="text" readonly  value="{{bikeid}}" placeholder="Bike ID Number">
                 <select id="location-ID-return">
                     <option value="1">Finnieston</option>
                     <option value="2">Dumbreck</option>
@@ -93,44 +93,69 @@
     </footer>
 
     <script>
-        var map, infoWindow;
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -34.397, lng: 150.644},
-                zoom: 15,
-                scaleControl: false,
-                streetViewControl: false,
-                mapTypeControl: false,
 
-            });
-            infoWindow = new google.maps.InfoWindow;
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        var uluru = {lat: 55.86220, lng: -4.25320};
+        // The map, centered at Uluru
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 14,center: uluru});
+        // The marker, positioned at Uluru
+        //var marker = new google.maps.Marker({position: uluru, map: map});
 
-            // Try HTML5 geolocation.
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(function(position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
 
-                    map.setCenter(pos);
-                    var marker = new google.maps.Marker({
-                        position: map.getCenter(),
-                        icon: {
-                            path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-                            scale: 5,
-                        },
-                        draggable: true,
-                        map: map
-                    });
-                }, function() {
-                    handleLocationError(true, infoWindow, map.getCenter());
+        var locations = [
+          {% for a in tkbikeloc %}
+            { lat: {{ a['lat'] }}, lng: {{ a['lng'] }} },
+          {% endfor %}
+        ];
+        // Create an array of alphabetical characters used to label the markers.
+        var labels = [
+          {% for b in tkbikeid %}
+            '{{b}}',
+          {% endfor %}
+        ];
+
+        // Add markers to the map.
+        var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i]
+          });
+        });
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                map.setCenter(pos);
+                var marker = new google.maps.Marker({
+                    position: map.getCenter(),
+                    icon: {
+                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                        scale: 5,
+                    },
+                    draggable: true,
+                    map: map
                 });
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow, map.getCenter());
-            }
+            }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
         }
+
+      };
 
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             infoWindow.setPosition(pos);
@@ -143,9 +168,11 @@
 
     </script>
     <script src="../static/js/rentbike.js"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>      
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmoXHtBb8SuFv_OGlfuwKmTAFKKITUkQI&callback=initMap"></script>
     <script type="text/javascript" src="../static/js/rental.js"></script>
-
+    
 </body>
 </html>

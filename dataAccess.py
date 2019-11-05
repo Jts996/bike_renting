@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import time, datetime
 
-import hashlib
+from hashlib import sha1
 
 #variable contains db for system used
 PRJ_DB = "bikeRenting.db"
@@ -35,7 +35,7 @@ def createUser(email,fname,lname,password):
         # Hashing passwords
         salt = "5gz"
         password = password+salt
-        hashedPassword = hashlib.sha1(password)
+        hashedPassword = sha1(password.encode("utf-8")).hexdigest()
 
         user_role = 1
 
@@ -65,7 +65,7 @@ def doLogin(email,password):
         # Creating hash
         salt = "5gz"
         password = password+salt
-        hashedPass = hashlib.sha1(password)
+        hashedPass = sha1(password.encode("utf-8")).hexdigest()
 
         cur= get_db().cursor()
         cur.execute("SELECT role_id, user_id, isActive, password FROM users WHERE email = ?", [email])
@@ -74,7 +74,7 @@ def doLogin(email,password):
         user_id= row[1]
         isActive= row[2]
         secret= row[3]
-        if hashPass == secret and isActive == 1: #login success
+        if hashedPass == secret and isActive == 1: #login success
             session_ran = np.random.randint(0,10,7)
             session_no=""
             for unit in session_ran:
@@ -304,12 +304,15 @@ def updateAccountBalance(user_id,amount,cardinfo,isTopup=True):
 #**********************
 
 #Return list of bikes with loc. info and status
-def trackbikes():
+def trackbikes(excludeused=False):
     try:
         bikeid= []
         locs=[]
         cur= get_db().cursor()
-        cur.execute("SELECT bike_id, loc_lat, loc_long FROM bikes")
+        if excludeused == True:
+            cur.execute("SELECT bike_id, loc_lat, loc_long FROM bikes WHERE status <> 'U'")
+        else:
+            cur.execute("SELECT bike_id, loc_lat, loc_long FROM bikes")
         for row in cur.fetchall():
             bikeid.append(row[0])
             locs.append({'lat': row[1] , 'lng': row[2] })
