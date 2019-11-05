@@ -306,7 +306,7 @@ def showTotalCounts24H():
     x,y,startDate,endDate  = countall_hours(df)
     x = list(x)
     y = list(y)
-    return render_template('showTotalCounts24H.html',x=x,y=y)
+    return render_template('manager/showTotalCounts24H.html', x=x, y=y)
 
 
 @app.route('/showTotalCounts/year')
@@ -316,6 +316,6 @@ def showTotalCountsYear():
     y1 = list(y1)
     x2 = list(x2)
     y2 = list(y2)
-    return render_template('showTotalCountsYear.html',x1=x1,y1=y1,x2=x2,y2=y2)
+    return render_template('manager/showTotalCountsYear.html', x1=x1, y1=y1, x2=x2, y2=y2)
 
 

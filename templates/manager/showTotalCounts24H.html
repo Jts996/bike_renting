@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=4.0" />
+	<title>Line Chart</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/navbar.css">
+</head>
+
+<body>
+
+
+	<header>
+        <div id="nav" class="nav">
+            <button id="openMenu" class="openMenu"><i class="fas fa-bars"></i></button>
+            <div id ="navLinks" class="navLinks">
+                <button id="closeNav"  class="muted-button closeNav"><i class="fas fa-times"></i></button>
+                <ul>
+                    <li class="option">
+                        <button id="index" onclick="window.location=  'manager.html';"><i class="fas fa-home"></i>Home</button>
+                    </li>
+                    <li class="option">
+                        <button id="tickets" onclick="window.location=  'showTotalCounts24H.html';"><i class="fas fa-download"></i> Report</button>
+                    </li>
+                    <li class="option">
+                        <button id="tickets" onclick="window.location=  'showTotalCountsYear.html';"><i class="fas fa-download"></i> Report</button>
+                    </li>
+
+                    <li class="option">
+                        <button onclick="window.location= 'resources/php/logout.html';"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </header>
+
+	<div style="width: 75%">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="{{url_for('static',filename='Chart.bundle.min.js')}}"></script>
+
+	<script>
+	var ctx = document.getElementById('myChart').getContext('2d');
+	var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+            labels: {{x}},
+			datasets: [{
+				label: 'Total counts for each hour',
+				data: {{y}},
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)'
+				],
+				borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)'
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			responsive: true,
+			title:{
+				display: true,
+				fontSize: '28',
+				text: 'Total counts in 24H',
+
+			},
+			legend:{
+			textDirection: 'horizon',
+			display: true,
+			labels:{
+			boxWidth: 80,
+			fontSize: 20,
+				},
+			position: 'right',
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true,
+						fontSize: '20',
+					}
+
+				}],
+				xAxes: [{
+					ticks: {
+						beginAtZero: true,
+						fontSize: '20',
+					}
+				}]
+			}
+		}
+	});
+	
+    window.myArea = new Chart(ctx,myChart);
+	</script>
+</body>
+
+    <script src="../../static/Chart.min.js"></script>
+</html>

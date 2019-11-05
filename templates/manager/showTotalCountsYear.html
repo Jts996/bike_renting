@@ -4,7 +4,7 @@
 
 <head>
 	<title>Line Chart</title>
-	<script src="{{url_for('static',filename='Chart.bundle.min.js')}}"></script>
+	<script src="../../static/Chart.min.js"></script>
 	<style>
 	canvas{
 		-moz-user-select: none;
@@ -12,9 +12,40 @@
 		-ms-user-select: none;
 	}
 	</style>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/navbar.css">
 </head>
 
 <body>
+
+	<header>
+        <div id="nav" class="nav">
+            <button id="openMenu" class="openMenu"><i class="fas fa-bars"></i></button>
+            <div id ="navLinks" class="navLinks">
+                <button id="closeNav"  class="muted-button closeNav"><i class="fas fa-times"></i></button>
+                <ul>
+                    <li class="option">
+                        <button id="index" onclick="window.location=  'manager.html';"><i class="fas fa-home"></i>Home</button>
+                    </li>
+                    <li class="option">
+                        <button id="tickets" onclick="window.location=  'showTotalCounts24H.html';"><i class="fas fa-download"></i> Report</button>
+                    </li>
+                    <li class="option">
+                        <button id="tickets" onclick="window.location=  'showTotalCountsYear.html';"><i class="fas fa-download"></i> Report</button>
+                    </li>
+
+                    <li class="option">
+                        <button onclick="window.location= 'resources/php/logout.html';"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </header>
+
 	<div style="width:75%;">
 		<canvas id="canvas"></canvas>
 	</div>
