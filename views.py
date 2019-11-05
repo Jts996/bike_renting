@@ -291,9 +291,13 @@ def countall_year():
     return x1,y1,startDate1,endDate1,x2,y2,startDate2,endDate2
 
 
+@app.route('/manager')
+def showmanagerHome():
+	return render_template('manager/manager.html')
+
 @app.route('/defectinfo')
 def showdefectinfo():
-    return render_template('defectinfo.html')
+    return render_template('manager/defectinfo.html')
 
 @app.route('/download')
 def downloadReport():

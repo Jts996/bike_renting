@@ -5,7 +5,7 @@
     <title>MANAGER</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../../manager/css/manager.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/manager.css">
     <link rel="stylesheet" type="text/css" href="../../static/css/navbar.css">
     <link rel="stylesheet" type="text/css" href="../../manager/jquery/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="../../manager/jquery/jquery-ui.theme.css">
@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="../../manager/jquery/manager.js"></script>
 </head> 
 <body>
+
 	<header>
         <div id="nav" class="nav">
             <button id="openMenu" class="openMenu"><i class="fas fa-bars"></i></button>
@@ -26,17 +27,19 @@
                 <button id="closeNav"  class="muted-button closeNav"><i class="fas fa-times"></i></button>
                 <ul>
                     <li class="option">
-                        <button id="index" onclick="window.location=  'manager.html';"><i class="fas fa-home"></i>Home</button>
+                        <button id="index" onclick="window.location=  '/manager';"><i class="fas fa-home"></i>Home</button>
                     </li>
                     <li class="option">
-                        <button id="tickets" onclick="window.location=  'showTotalCounts24H.html';"><i class="fas fa-download"></i> Report</button>
+                        <button id="tickets" onclick="window.location=  '/showTotalCounts/24H';"><i class="fas fa-chart-area"></i> 24hrs</button>
                     </li>
                     <li class="option">
-                        <button id="tickets" onclick="window.location=  'showTotalCountsYear.html';"><i class="fas fa-download"></i> Report</button>
+                        <button id="tickets" onclick="window.location=  '/showTotalCounts/year';"><i class="fas fa-chart-bar"></i> Years</button>
                     </li>
-                  
+                   <li class="option">
+                        <button id="tickets" onclick="window.location=  '/defectinfo';"><i class="fas fa-chart-line"></i> Defects</button>
+                    </li>
                     <li class="option">
-                        <button onclick="window.location= 'resources/php/logout.html';"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                        <button onclick="window.location= '/Logout/';"><i class="fas fa-sign-out-alt"></i>Logout</button>
                     </li>
 
 
