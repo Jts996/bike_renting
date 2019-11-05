@@ -3,110 +3,193 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from . import app
 from . import dataAccess as mydb
 
-@app.route("/")
-def Home():
-    return render_template("index.html")
 
-@app.route("/Register",methods=['POST','GET'])
-def Register():
-    if request.method=='POST':
-        try:
-            CUST_TYPE= 1 #1 for Customer
-            email=request.form['email']
-            phone_number=request.form['phone_number']
-            name=request.form['name']
-            password=request.form['password']
-            if mydb.createUser(CUST_TYPE,email,phone_number,name,password)==True:
-                return render_template("Register.html", msg="Success")
-            else:
-                return render_template("Register.html", msg="Registration Failed")
-        except:
-            return render_template("resources/templates/Register.html", msg="Error!")
+#Class holding user profile after login
+class User_Session:
+    def __init__(self,userid,userrole, sessionid):
+        self.id = userid
+        self.role = userrole
+        self.sessionid = sessionid
+
+
+@app.route("/",methods=['POST','GET'])
+def login():
+    return render_template("login.html")
+
+@app.route("/api/dologin", methods=['POST'])
+def dologin():
+    
+    data =request.get_json()
+    email= data['emailLogin']
+    password= data['password']
+    valid_user=False
+    (valid_user,user_role,user_id,session_id) = mydb.doLogin(email,password)
+
+    if (valid_user == True):
+        #write session into client
+
+        u_sess = User_Session(user_id,user_role,session_id)
+        session['user_session']=u_sess.__dict__
+
+        #redirect admin home
+        res= { 'token': session_id, 'retstatus': 'login success'}
     else:
-        return render_template("resources/templates/Register.html", msg="Welcome")
+        res= { 'token': '', 'retstatus': 'login failed, invalid username or password...'}
+    return res
 
-@app.route("/Login/",methods=['POST','GET'])
-def Login():
-    if request.method=='POST':
-        try:
-            email=request.form['email']
-            password=request.form['password']
-            user_role=-1
-            session_id=""
-            user_name=""
-            valid_user=False
-            (valid_user,user_role,user_name,session_id) = mydb.doLogin(email,password)
-            if valid_user == True:
-                #put user profile into session after login success
-                u_sess = User_Session(email,user_name,user_role,session_id)
-                session['user_session']=u_sess.__dict__
-                return render_template("resources/templates/Login.html", msg="Login Success")
-            else:    
-                return render_template("resources/templates/Login.html", msg="Login Failed")
 
-        except:
-            return render_template("resources/templates/Login.html", msg="Error!")
+@app.route("/Profile")
+def profile():
+    if 'user_session' in session: #check user session exist or not
+        u_sess= session['user_session']
+        (email,ph_num,fname,lname,addr,post_code,city,country) = mydb.getPersonalInfo(u_sess['id'])
+        (card_num,card_name,exp_mm,exp_yy,cvv) = mydb.getCardInfo(u_sess['id'])
+        user_prof= {'email':email,'ph_num':ph_num,'fname':fname,'lname':lname,'addr':addr,'post_code':post_code,'city':city,'country':country}
+        card_info= {'card_num':card_num,'card_name':card_name,'exp_mm':exp_mm,'exp_yy':exp_yy,'cvv':cvv}
+        return render_template("profile.html",userprof=user_prof,cardinfo=card_info)
+    return render_template("profile.html")
+
+
+@app.route("/api/updateprofile", methods=['POST'])
+def updateprofile():
+    if 'user_session' in session: #check user session exist or not
+        u_sess= session['user_session']
+        data =request.get_json()
+        ret = mydb.updatePersonalInfo(u_sess['id'],data['email'],data['phone'],data['fname'],data['lname'],data['address'],data['pincode'],data['city'],data['country'])
+        if ret == True:
+            output = "Update Success"
+        else:
+            output = "Update Failed"
+        res= { 'retstatus': output}
+        return res
     else:
-        return render_template("resources/templates/Login.html", msg="Welcome")
+        return None
+
+@app.route("/api/updatecardinfo", methods=['POST'])
+def updatecardinfo():
+    if 'user_session' in session: #check user session exist or not
+        u_sess= session['user_session']
+        data =request.get_json()
+        ret = mydb.updateCardInfo(u_sess['id'],data['cnum'],data['cname'],data['exp_mm'],data['exp_yy'],data['cvv'])
+        if ret == True:
+            output = "Update Success"
+        else:
+            output = "Update Failed"
+        res= { 'retstatus': output}
+        return res
+    else:
+        return None
+
+@app.route("/api/closeuseraccount", methods=['POST'])
+def closeuseraccount():
+    if 'user_session' in session: #check user session exist or not
+        u_sess= session['user_session']
+        data =request.get_json()
+        ret = mydb.deactivateUser(u_sess['id'],data['ca_email'])
+        if ret == 0:
+            output="Email mismatching, unable to close account"
+        else:
+            output="Account Closed Successfully"
+        res= { 'retstatus': output}
+        return res
+    else:
+        return None
+
+
+@app.route("/api/doregistration", methods=['POST'])
+def doregistration():
+    data =request.get_json()
+    ret = mydb.createUser(1,data['email'],data['fname'],data['lname'],data['password'])
+    if ret == False:
+        output="Registration faiiled"
+    else:
+        output="Registration Success"
+    res= { 'retstatus': output}
+    return res
+
+
+@app.route("/Rent")
+def rent():
+    if 'user_session' in session: #check user login before or not
+        return render_template("rent.html")
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route("/api/report_defect", methods=['POST'])
+def report_defect():
+    if 'user_session' in session: #check user session exist or not
+        u_sess= session['user_session']
+        data =request.get_json()
+        ret = mydb.createDefectReport(u_sess['id'],data['bike_id'],data['def_category'],data['def_details'])
+        if ret== True:
+            ret = mydb.updateBikeState(data['bike_id'],'D')
+        if ret == False:
+            output="Defect Report failed"
+        else:
+            output="Defect Report Success"
+        res= { 'retstatus': output}
+        return res
+    else:
+        return None
+
+@app.route("/api/rent_bike", methods=['POST'])
+def rent_bike():
+    if 'user_session' in session: #check user session exist or not
+        u_sess= session['user_session']
+        data =request.get_json()
+        (ret, orderid) = mydb.createOrder(u_sess['id'],data['bike_id'])
+        ret = mydb.updateBikeState(data['bike_id'],'U')
+        if ret == False:
+            output="Rent failed"
+        else:
+            output="Rent Success"
+        res= { 'retstatus': output, 'orderid': orderid}
+        return res
+    else:
+        return None
+
+@app.route("/api/return_bike", methods=['POST'])
+def return_bike():
+    if 'user_session' in session: #check user session exist or not
+        data =request.get_json()
+        (ret, amount) = mydb.settleOrder(data["order_id"])
+        ret = mydb.updateBikeState(data['bike_id'],'A')
+        if ret == False:
+            output="Return failed"
+        else:
+            output="Return Success"
+        res= { 'retstatus': output, 'amount': str(amount)+" pounds"}
+        return res
+    else:
+        return None
+
+@app.route("/Home")
+def home():
+    if 'user_session' in session: #check user login before or not
+        user_role = session['user_session']['role']
+        if user_role== 1:
+            return render_template("index.html")
+        elif user_role== 2:
+            return redirect(url_for('adminIndex'))
+        else:
+            return redirect(url_for('logout'))
+         
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/Logout/")
-def AppLogout():
+def logout():
     session.pop('user_session',None)
-    return redirect(url_for('Login'))
+    return redirect(url_for('login'))
 
-@app.route("/Payment/")
-def Payment():
-    if 'user_session' in session: #check user login before or not
-        return render_template("resources/templates/Payment.html")
-    else:
-        return redirect(url_for('Login'))
-
-@app.route("/Rent/")
-def Rent():
-    if 'user_session' in session: #check user login before or not
-        return render_template("resources/templates/Rent.html")
-    else:
-        return redirect(url_for('Login'))
-
-@app.route("/Report_Defects/")
-def Report_Defects():
-    if 'user_session' in session: #check user login before or not
-        return render_template("resources/templates/Report_Defects.html")
-    else:
-        return redirect(url_for('Login'))
-
-@app.route("/Check_Order/")
-def Check_Order():
-    if 'user_session' in session: #check user login before or not
-        return render_template("resources/templates/Check_Order.html")
-    else:
-        return redirect(url_for('Login'))
-
-@app.route("/api/data", methods=['POST'])
-def get_data():
-    if request.method == "POST":
-        data =request.get_json()
-    output= 'I got it ..' + data['output']
-    res= { 'gotit': output}
-    return res
 
 #admin page there******************
 
-@app.route("/logout")
-def AdminLogout():
-    session.pop('user_session',None)
-    return redirect(url_for('AdminLogin'))
-
-@app.route("/")
-def AdminLogin():
-    return render_template("login.html")
-
 @app.route("/admin",methods=['POST','GET'])
-def AdminIndex():
+def adminIndex():
 
     if 'user_session' in session: #check user session exist or not
-        my_sess= session['user_session']
-
         dashboard= mydb.getDashBoardFig()
         (tkbike_id, tkbike_loc) = mydb.trackbikes()
         (df_rpt) = mydb.showDefectReport()
@@ -123,36 +206,15 @@ def AdminIndex():
             else:
                 lstcolor.append("rgba(2,117,216,1)")
 
-        return render_template("index.html", dfig=dashboard, tkbikeid=tkbike_id, tkbikeloc=tkbike_loc, dfrpt=df_rpt, parkid=lststation, parkrate=lstrate, parkcolor=lstcolor)
+        return render_template("/admin/index.html", dfig=dashboard, tkbikeid=tkbike_id, tkbikeloc=tkbike_loc, dfrpt=df_rpt, parkid=lststation, parkrate=lstrate, parkcolor=lstcolor)
     else:
-        return redirect(url_for('AdminLogin'))
+        return redirect(url_for('login'))
 
 @app.route("/blank",methods=['POST','GET'])
 def blankPage():
-    return render_template("resources/templates/admin/blank.html")
+    return render_template("/admin/blank.html")
 
 
-@app.route("/api/login", methods=['POST'])
-def login():
-    if request.method == "POST":
-        data =request.get_json()
-    email= data['email']
-    password= data['password']
-    valid_user=False
-    (valid_user,user_role,user_name,session_id) = mydb.doLogin(email,password)
-    #user_session={'id':session_id,'name':user_name,'role':user_role}
-    
-    if (valid_user == True) and (user_role > 1):
-        #write session into client
-
-        u_sess = User_Session(email,user_name,user_role,session_id)
-        session['user_session']=u_sess.__dict__
-
-        #redirect admin home
-        res= { 'token': session_id, 'result': 'login success'}
-    else:
-        res= { 'token': '', 'result': 'login failed, invalid username or password...'}
-    return res
 
 @app.route("/api/changeDefectStatus", methods=['POST'])
 def changeDfStatus():
@@ -168,12 +230,4 @@ def changeDfStatus():
         res= { 'result': 'nok'}
     return res
 
-
-#Class holding user profile after login
-class User_Session:
-    def __init__(self,usermail, username, userrole, sessionid):
-        self.email = usermail
-        self.name = username
-        self.role = userrole
-        self.sessionid = sessionid
 

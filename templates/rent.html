@@ -20,16 +20,16 @@
                <button id="closeNav"  class="muted-button closeNav"><i class="fas fa-times"></i></button>
                <ul>
                     <li class="option">
-                        <button id="index" onclick="window.location=  'index.html';"><i class="fas fa-home"></i>Home</button>
+                        <button id="index" onclick="window.location=  '/Home';"><i class="fas fa-home"></i>Home</button>
                     </li>
                     <li class="option">
                         <button id="tickets" onclick="window.location=  'rent.html';"><i class="fas fa-bicycle"></i>rent</button>
                     </li>
                     <li class="option">
-                        <button id="profile" onclick="window.location= 'profile.html';"><i class="fas fa-user"></i>Profile</button>
+                        <button id="profile" onclick="window.location= '/Profile';"><i class="fas fa-user"></i>Profile</button>
                     </li>
                     <li class="option">
-                        <button onclick="window.location= 'resources/php/logout.html';"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                        <button onclick="window.location= '/Logout';"><i class="fas fa-sign-out-alt"></i>Logout</button>
                     </li>
                 </ul>
             </div>
@@ -66,7 +66,8 @@
         <div class="widget">
             <h2>Return your Bike</h2>
             <div class="bike-form">
-                <input id="bike-id-return" type="text" placeholder="Bike ID Number">
+                <input id="order-id-return" hidden type="text" placeholder="Defect Category">
+                <input id="bike-id-return" type="text" readonly  placeholder="Bike ID Number">
                 <select id="location-ID-return">
                     <option value="1">Finnieston</option>
                     <option value="2">Dumbreck</option>
@@ -76,9 +77,11 @@
         </div>
 
         <div class="widget">
-            <h2>Report a Bike</h2>
+            <h2>Report Defect</h2>
             <div class="bike-form">
                 <input id="bike-id-report" type="text" placeholder="Bike ID Number">
+                <input id="def-category-report" hidden type="text" value="Misc." placeholder="Defect Category">
+                <input id="def-details-report" type="text" placeholder="Details">
                 <button id="report-bike">Report</button>
             </div>
 
@@ -142,7 +145,7 @@
     <script src="../static/js/rentbike.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmoXHtBb8SuFv_OGlfuwKmTAFKKITUkQI&callback=initMap"></script>
-
+    <script type="text/javascript" src="../static/js/rental.js"></script>
 
 </body>
 </html>
