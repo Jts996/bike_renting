@@ -20,62 +20,33 @@ class User_Session:
         self.role = userrole
         self.sessionid = sessionid
 
-#**********************
-#*****Login Page  *****
-#**********************
-#Entry point page for login and registration
+
 @app.route("/",methods=['POST','GET'])
 def login():
     return render_template("login.html")
 
-#api to support login
 @app.route("/api/dologin", methods=['POST'])
 def dologin():
-    #get required login info in json format
+    
     data =request.get_json()
     email= data['emailLogin']
     password= data['password']
     valid_user=False
-    #check valid user or not
     (valid_user,user_role,user_id,session_id) = mydb.doLogin(email,password)
 
     if (valid_user == True):
-        #store user session
+        #write session into client
 
         u_sess = User_Session(user_id,user_role,session_id)
         session['user_session']=u_sess.__dict__
 
-        #return success token to client
+        #redirect admin home
         res= { 'token': session_id, 'retstatus': 'login success'}
     else:
         res= { 'token': '', 'retstatus': 'login failed, invalid username or password...'}
     return res
 
-#api to perform user registration
-@app.route("/api/doregistration", methods=['POST'])
-def doregistration():
-    data =request.get_json() #get user info in json format
-    ret = mydb.createUser(data['email'],data['fname'],data['lname'],data['password'])
-    if ret == False:
-        output="Registration faiiled"
-    else:
-        output="Registration Success"
-    res= { 'retstatus': output}
-    return res
 
-#Logout page
-@app.route("/Logout/")
-def logout():
-    session.pop('user_session',None) #clear user session and redirect to login page
-    return redirect(url_for('login'))
-
-#+++++++++++Customer+++++++++++
-
-#**********************
-#*****Profile Page  ***
-#**********************
-
-#Page for profile setting
 @app.route("/Profile")
 def profile():
     if 'user_session' in session: #check user session exist or not
@@ -84,51 +55,45 @@ def profile():
         (card_num,card_name,exp_mm,exp_yy,cvv) = mydb.getCardInfo(u_sess['id'])
         user_prof= {'email':email,'ph_num':ph_num,'fname':fname,'lname':lname,'addr':addr,'post_code':post_code,'city':city,'country':country}
         card_info= {'card_num':card_num,'card_name':card_name,'exp_mm':exp_mm,'exp_yy':exp_yy,'cvv':cvv}
-        return render_template("profile.html",userprof=user_prof,cardinfo=card_info) #return profile template
-    else:
-        return redirect(url_for('login')) #redirect to login page if user session not found
+        return render_template("profile.html",userprof=user_prof,cardinfo=card_info)
+    return render_template("profile.html")
 
-#api for handling profile update
+
 @app.route("/api/updateprofile", methods=['POST'])
 def updateprofile():
     if 'user_session' in session: #check user session exist or not
-        u_sess= session['user_session'] #get back user session containing user information
-        data =request.get_json() #get update info. from client in json format
-        #perform update
+        u_sess= session['user_session']
+        data =request.get_json()
         ret = mydb.updatePersonalInfo(u_sess['id'],data['email'],data['phone'],data['fname'],data['lname'],data['address'],data['pincode'],data['city'],data['country'])
         if ret == True:
             output = "Update Success"
         else:
             output = "Update Failed"
-        res= { 'retstatus': output} #tell client if success or not
+        res= { 'retstatus': output}
         return res
     else:
         return None
 
-#api for handling card info update
 @app.route("/api/updatecardinfo", methods=['POST'])
 def updatecardinfo():
     if 'user_session' in session: #check user session exist or not
-        u_sess= session['user_session'] #get back user session containing user information
-        data =request.get_json() #get update info. from client in json format
-        #perform card update
+        u_sess= session['user_session']
+        data =request.get_json()
         ret = mydb.updateCardInfo(u_sess['id'],data['cnum'],data['cname'],data['exp_mm'],data['exp_yy'],data['cvv'])
         if ret == True:
             output = "Update Success"
         else:
             output = "Update Failed"
-        res= { 'retstatus': output} #tell client if success or not
+        res= { 'retstatus': output}
         return res
     else:
         return None
 
-#api for handling close account
 @app.route("/api/closeuseraccount", methods=['POST'])
 def closeuseraccount():
     if 'user_session' in session: #check user session exist or not
-        u_sess= session['user_session'] #get back user session containing user information
-        data =request.get_json() #get update info. from client in json format
-        #close account
+        u_sess= session['user_session']
+        data =request.get_json()
         ret = mydb.deactivateUser(u_sess['id'],data['ca_email'])
         if ret == 0:
             output="Email mismatching, unable to close account"
@@ -139,40 +104,34 @@ def closeuseraccount():
     else:
         return None
 
-#**********************
-#*****Rent Page    ****
-#**********************
-#Page for rent, including function on bike rent, return and defect reporting
-@app.route("/Rent", methods=['POST','GET'])
+
+@app.route("/api/doregistration", methods=['POST'])
+def doregistration():
+    data =request.get_json()
+    ret = mydb.createUser(1,data['email'],data['fname'],data['lname'],data['password'])
+    if ret == False:
+        output="Registration faiiled"
+    else:
+        output="Registration Success"
+    res= { 'retstatus': output}
+    return res
+
+
+@app.route("/Rent")
 def rent():
-    (tkbike_id, tkbike_loc) = mydb.trackbikes(True) #get all bikes (not in used) location 
-    stat= mydb.getBikeStations() #get bike station id and name
-    if request.method=='POST': #on rent or return bike click, browser will post back for update latest bike count
-        orderid=request.form['orderid']
-        bikeid=request.form['bikeid']
+    if 'user_session' in session: #check user login before or not
+        return render_template("rent.html")
+    else:
+        return redirect(url_for('login'))
 
-        if 'user_session' in session: #check user login before or not
-            #with order id and bike id from rent or return that need to display to user for a rent session
-            return render_template("rent.html",tkbikeid=tkbike_id, tkbikeloc=tkbike_loc,orderid=orderid,bikeid=bikeid,stat=stat)
-        else:
-            return redirect(url_for('login')) #user did not login before
-    else: 
-        if 'user_session' in session: #check user login before or not
-            #render page without order id and bike id, not in rent session
-            return render_template("rent.html",tkbikeid=tkbike_id, tkbikeloc=tkbike_loc,orderid='',bikeid='',stat=stat)
-        else:
-            return redirect(url_for('login')) #user did not login before
 
-#api to handle defect reported
 @app.route("/api/report_defect", methods=['POST'])
 def report_defect():
     if 'user_session' in session: #check user session exist or not
         u_sess= session['user_session']
-        data =request.get_json() #get defect details in json format
-        #create a new defect report
+        data =request.get_json()
         ret = mydb.createDefectReport(u_sess['id'],data['bike_id'],data['def_category'],data['def_details'])
         if ret== True:
-            #update bike status to defect
             ret = mydb.updateBikeState(data['bike_id'],'D')
         if ret == False:
             output="Defect Report failed"
@@ -183,44 +142,37 @@ def report_defect():
     else:
         return None
 
-#api to handle bike renting
 @app.route("/api/rent_bike", methods=['POST'])
 def rent_bike():
     if 'user_session' in session: #check user session exist or not
         u_sess= session['user_session']
-        data =request.get_json() #get bike id to be rent
-        (ret, orderid) = mydb.createOrder(u_sess['id'],data['bike_id']) #create a new order
-        ret = mydb.updateBikeState(data['bike_id'],'U') #bike marked in use
+        data =request.get_json()
+        (ret, orderid) = mydb.createOrder(u_sess['id'],data['bike_id'])
+        ret = mydb.updateBikeState(data['bike_id'],'U')
         if ret == False:
             output="Rent failed"
         else:
             output="Rent Success"
-        res= { 'retstatus': output, 'orderid': orderid} #return order id created
+        res= { 'retstatus': output, 'orderid': orderid}
         return res
     else:
         return None
 
-#api to handle bike return
 @app.route("/api/return_bike", methods=['POST'])
 def return_bike():
     if 'user_session' in session: #check user session exist or not
         data =request.get_json()
-        (ret, amount, duration) = mydb.settleOrder(data["order_id"]) #settle order with amount and duration calculated
-        ret = mydb.updateBikeState(data['bike_id'],'A',data['station_id']) #mark bike available
+        (ret, amount) = mydb.settleOrder(data["order_id"])
+        ret = mydb.updateBikeState(data['bike_id'],'A')
         if ret == False:
             output="Return failed"
         else:
             output="Return Success"
-        res= { 'retstatus': output, 'amount': str(amount)+" pounds", 'duration':duration} #return amount and duration
+        res= { 'retstatus': output, 'amount': str(amount)+" pounds"}
         return res
     else:
         return None
 
-#**********************
-#*****Home Page    ****
-#**********************
-
-#Page for introduction, displayed after customer login successfully
 @app.route("/Home")
 def home():
     if 'user_session' in session: #check user login before or not
@@ -229,72 +181,74 @@ def home():
             return render_template("index.html")
         elif user_role== 2:
             return redirect(url_for('adminIndex'))
-        elif user_role == 3:
-            return redirect(url_for('showmanagerHome'))
         else:
             return redirect(url_for('logout'))
          
     else:
         return redirect(url_for('login'))
 
+@app.route("/Logout/")
+def logout():
+    session.pop('user_session',None)
+    return redirect(url_for('login'))
 
-#+++++++++++Operator+++++++++++
 
-#**********************
-#*****Operation page***
-#**********************
-#Operator page for tracking bikes, manage defects, moving bikes
-#with Dashboard to show summary in one page
+#admin page there******************
+
 @app.route("/admin",methods=['POST','GET'])
 def adminIndex():
 
     if 'user_session' in session: #check user session exist or not
-        dashboard= mydb.getDashBoardFig() #get figures for dashboard
-        (tkbike_id, tkbike_loc) = mydb.trackbikes() #get bikes location
-        (df_rpt) = mydb.showDefectReport() #get defect reports
-        (parking_status)= mydb.showBikeStations() #get bike stations occupying rate
+        dashboard= mydb.getDashBoardFig()
+        (tkbike_id, tkbike_loc) = mydb.trackbikes()
+        (df_rpt) = mydb.showDefectReport()
+        (parking_status)= mydb.showBikeStations()
         lststation= list(parking_status['station_id'])
         lstrate= list(parking_status['occ_rate'])
-        lstcolor= [] #different color depending on occupying rate
+        lstcolor= []
 
         for i in range(0,len(lstrate)):
-            if lstrate[i] >= 80: #RED in case of over 80%
+            if lstrate[i] >= 80:
                 lstcolor.append("rgba(216,56,7,1)")
-            elif lstrate[i] <=20: #YELLO in case of less than 20%
+            elif lstrate[i] <=20:
                 lstcolor.append("rgba(244,233,76,1)")
             else:
                 lstcolor.append("rgba(2,117,216,1)")
-        #render page with live content retreive from database
+
         return render_template("/admin/index.html", dfig=dashboard, tkbikeid=tkbike_id, tkbikeloc=tkbike_loc, dfrpt=df_rpt, parkid=lststation, parkrate=lstrate, parkcolor=lstcolor)
     else:
         return redirect(url_for('login'))
 
-#api for changing defect report status, for managing defect
-#RD-new defect-->RI-investigating-->RF-fixed
-@app.route("/api/changeDefectStatus", methods=['POST'])
-def changeDfStatus():
-    if request.method == "POST":
-        data =request.get_json()
-    id= data['id'] #get status in json format, id and new status
-    newdfStatus= data['newdfStatus']
-    ok = mydb.updateDefectStatus(id,newdfStatus) #perform update
-    
-    if (ok == True): #return result
-        res= { 'result': 'ok'} 
-    else:
-        res= { 'result': 'nok'}
-    return res
-
-#dummy page RFU
 @app.route("/blank",methods=['POST','GET'])
 def blankPage():
     return render_template("/admin/blank.html")
 
-#+++++++++++Operator+++++++++++
-#**********************
-#*****Manager page***
-#**********************
 
+
+@app.route("/api/changeDefectStatus", methods=['POST'])
+def changeDfStatus():
+    if request.method == "POST":
+        data =request.get_json()
+    id= data['id']
+    newdfStatus= data['newdfStatus']
+    ok = mydb.updateDefectStatus(id,newdfStatus)
+    
+    if (ok == True):
+        res= { 'result': 'ok'}
+    else:
+        res= { 'result': 'nok'}
+    return res
+
+@app.route("/api/doCheck", methods=['POST'])
+def doCheck():
+    data =request.get_json()
+    ret = mydb.createDate(data['startdate'],data['enddate'])
+    if ret == False:
+        output="failed"
+    else:
+        output="saved Successfully"
+    res= { 'retstatus': output}
+    return res
 
 def querydatabase(end):
     # database = 'bikehistoryall.db'
