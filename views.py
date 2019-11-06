@@ -3,10 +3,11 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from . import app
 from . import dataAccess as mydb
 
+
 from flask import Flask,jsonify,render_template
-from malipulate_database import *
-from generateData_method import *
-from visual_method import *
+from . import malipulate_database
+from . import generateData_method
+from . import visual_method
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -240,7 +241,9 @@ def changeDfStatus():
     return res
 
 
+#Manager pages methos  ******************:
 
+#extract data from database or csv file.
 def querydatabase(end):
     # database = 'bikehistoryall.db'
     # db = connet_datebase(database)
@@ -253,7 +256,7 @@ def querydatabase(end):
     df = original_data.loc[:end]
     return df
 
-
+#method for count all order in a year. It process data query from database or csv file.
 def countall_hours(df):
     count_all = pd.DataFrame({'Time': np.arange(0, 24, 1), 'Count': [0] * 24})
     for i in range(df.shape[0]):
@@ -266,6 +269,7 @@ def countall_hours(df):
     y = count_all['Count']
     return x,y,startDate,endDate
 
+#method for count all order in a year. It process data query from database or csv file.
 def countall_year():
     df1 = querydatabase(4000)
     df2 = querydatabase(50000)
@@ -290,20 +294,19 @@ def countall_year():
 
     return x1,y1,startDate1,endDate1,x2,y2,startDate2,endDate2
 
-
+# render index page for manager & also page for user to select date period and download custome report
 @app.route('/manager')
 def showmanagerHome():
 	return render_template('manager/manager.html')
 
+
+#render defectinfo page
 @app.route('/defectinfo')
 def showdefectinfo():
     return render_template('manager/defectinfo.html')
 
-@app.route('/download')
-def downloadReport():
-    return render_template('manager.html')
 
-
+#render showshowTotalCounts/24H page
 @app.route('/showTotalCounts/24H')
 def showTotalCounts24H():
     df = querydatabase(500)
@@ -312,7 +315,7 @@ def showTotalCounts24H():
     y = list(y)
     return render_template('manager/showTotalCounts24H.html', x=x, y=y)
 
-
+#render showTotalCounts/year page
 @app.route('/showTotalCounts/year')
 def showTotalCountsYear():
     x1,y1,startDate1,endDate1,x2,y2,startDate2,endDate2 = countall_year()

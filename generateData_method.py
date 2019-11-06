@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+#from original dataset to generate data we can use in real simulation
 def genConcreteData(df):
     times = []
     counts = []

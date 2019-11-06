@@ -7,16 +7,18 @@ import pandas as pd
 
 
 originalData = pd.read_csv('train.csv')
+#prosess original data from train.csv to data we can use in cumtomer page
+#Add user_id, bike_id, using_period, fee, time_minuites,.....
 
-#slice
-# df = originalData.iloc[:1000]
-# order = genConcreteData(df)
-# order.to_csv('dataset_1000.csv')
-# order.to_excel('dateset_1000.xlsx')
+df = originalData.iloc[:1000]
+order = genConcreteData(df)
+order.to_csv('dataset_1000.csv')
+order.to_excel('dateset_1000.xlsx')
 
+#build database
 database = 'bikehistoryall.db'
 db = connet_datebase(database)
-# query = '''CREATE TABLE IF NOT EXISTS order (date text, start_time_hour integer,
+# query = '''CREATE TABLE IF NOT EXISTS alldata (date text, start_time_hour integer,
 #             strat_time_minutes integer, end_time_hour integer,
 #             end_time_minutes integer, total_fee integer, bike_id integer,
 #              user_id integer, workingday boolean, season integer, weather integer,
@@ -27,6 +29,7 @@ originalData.info()
 originalData.to_sql('alldata',db,if_exists='replace')
 # db.commit()
 
+#test mothod for query database
 
 # sql_query = 'SELECT * FROM history'
 # df = pd.read_sql(sql_query, con=db)

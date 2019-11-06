@@ -4,13 +4,13 @@ import pandas as pd
 from visual_method import *
 from PIL import Image, ImageDraw, ImageFont
 import cv2
-
-
-
+#test data
 original_data = pd.read_csv('train.csv')
-
 df = original_data.loc[:6000]
 df2 = original_data.loc[:10000]
+
+
+
 
 def countall_year():
     df1 = pd.DataFrame(original_data.loc[5000:5500])
@@ -35,91 +35,106 @@ def countall_year():
     y2 = count_all2['Count']
     return count_all1
 
-count_all = countall_year()
-print(count_all)
 
-# # draw_count_hours(df)
-# # draw_two_count_hours(df,df2)
-# # draw_week_weekend_count(df)
-# # draw_three_week_weekend(df,'2011-01-01 01:00:00',
-# #                          '2011-01-19 01:00:00',
-# #                          '2011-02-05 01:00:00',
-# #                          '2011-02-19 01:00:00',
-# #                          '2011-01-02 01:00:00',
-# #                          '2011-03-08 01:00:00')
-# #
-# # draw_stack_three_week_weekend(df,'2011-01-01 01:00:00',
-# #                          '2011-01-19 01:00:00',
-# #                          '2011-02-05 01:00:00',
-# #                          '2011-02-19 01:00:00',
-# #                          '2011-01-02 01:00:00',
-# #                          '2011-03-08 01:00:00')
-#
-# def catchfourpictures(image1,image2,image3,image4):
-#
-#     ims = [Image.open(image1),Image.open(image2),Image.open(image3),Image.open(image4)]
-#     width, height = ims[0].size
-#     result = Image.new(ims[0].mode, (width, height * len(ims)))
-#
-#     for i, im in enumerate(ims):
-#         result.paste(im, box=(0, i * height))
-#
-#     result.save('report.jpeg')
-#
-# def catchfourpictures_horizon(image1,image2,image3,image4):
-#
-#     ims = [Image.open(image1),Image.open(image2),Image.open(image3),Image.open(image4)]
-#     width, height = ims[0].size
-#     result = Image.new(ims[0].mode, (2*width, height*2))
-#     a = True
-#     for i, im in enumerate(ims):
-#         if(a):
-#             result.paste(im, box=(0, int(i/2) * height))
-#             a = not a
-#         else:
-#             result.paste(im, box=(width, int(i/2) * height))
-#             a = not a
-#     result.save('report.jpeg')
-#
-# def catchblankpictures(img):
-#     img = Image.open(img)
-#     width, height = img.size
-#     blankheight = 500
-#     newIm = Image.new('RGB', (width, blankheight), 'white')
-#     newIm.save(r'blank.jpeg')
-#     ims = [newIm,img]
-#     result = Image.new('RGB', (width, height+blankheight))
-#     result.paste(ims[0], box=(0, 0))
-#     result.paste(ims[1],box=(0,blankheight))
-#     result.save('report.jpeg')
-#
-# image1 = 'draw_count_hours.jpeg'
-# image2 = 'draw_stack_three_week_weekend.jpeg'
-# image3 = 'draw_two_count_hours.jpeg'
-# image4 = 'draw_three_week_weekend.jpeg'
-#
-# catchfourpictures_horizon(image1,image2,image3,image4)
-#
-#
-# header = "Dear manager, here is final report for you between period you choose. "
-# font_type = '/System/Library/Fonts/STHeiti Light.ttc'
-# font_medium_type = '/System/Library/Fonts/STHeiti Medium.ttc'
-# header_font = ImageFont.truetype(font_medium_type, 250)
-# font = ImageFont.truetype(font_type, 24)
-# color = "#000000"
-#
-#
-# img = 'report.jpeg'
-#
-# catchblankpictures(img)
-#
-# img = 'report.jpeg'
-# new_img = 'report.jpeg'
-# image = Image.open(img)
-# draw = ImageDraw.Draw(image)
-# width, height = image.size
-# header_x = 100
-# header_y = 100
-# draw.text((header_x, header_y), u'%s' % header, color, header_font)
-# image.save(new_img, 'jpeg')
 
+
+#stitch images methods
+def catchfourpictures(image1,image2,image3,image4):
+
+    ims = [Image.open(image1),Image.open(image2),Image.open(image3),Image.open(image4)]
+    width, height = ims[0].size
+    result = Image.new(ims[0].mode, (width, height * len(ims)))
+
+    for i, im in enumerate(ims):
+        result.paste(im, box=(0, i * height))
+
+    result.save('report.jpeg')
+
+def catchfourpictures_horizon(image1,image2,image3,image4):
+
+    ims = [Image.open(image1),Image.open(image2),Image.open(image3),Image.open(image4)]
+    width, height = ims[0].size
+    result = Image.new(ims[0].mode, (2*width, height*2))
+    a = True
+    for i, im in enumerate(ims):
+        if(a):
+            result.paste(im, box=(0, int(i/2) * height))
+            a = not a
+        else:
+            result.paste(im, box=(width, int(i/2) * height))
+            a = not a
+    result.save('report.jpeg')
+
+# add blank place for add text into report(graphs)
+def catchblankpictures(img):
+    img = Image.open(img)
+    width, height = img.size
+    blankheight = 500
+    newIm = Image.new('RGB', (width, blankheight), 'white')
+    newIm.save(r'blank.jpeg')
+    ims = [newIm,img]
+    result = Image.new('RGB', (width, height+blankheight))
+    result.paste(ims[0], box=(0, 0))
+    result.paste(ims[1],box=(0,blankheight))
+    result.save('report.jpeg')
+
+
+
+def produceReport(period1_start,period1_end,period2_start,period2_end,period3_start,period3_end,word="Dear manager, here is final report for you between period you choose. "):
+    # 1. fisrt step draw five graphs with data from csv files or database
+    # load data from dataset
+    original_data = pd.read_csv('train.csv')
+
+    df = original_data.loc[:6000]
+    df2 = original_data.loc[:10000]
+
+    draw_count_hours(df)
+    draw_two_count_hours(df, df2)
+    draw_week_weekend_count(df)
+    draw_three_week_weekend(df, period1_start='2011-01-01 01:00:00',
+                            period1_end='2011-01-19 01:00:00',
+                            period2_start='2011-02-05 01:00:00',
+                            period2_end = '2011-02-19 01:00:00',
+                            period3_start = '2011-01-02 01:00:00',
+                            period3_end = '2011-03-08 01:00:00')
+    draw_stack_three_week_weekend(df, period1_start='2011-01-01 01:00:00',
+                            period1_end='2011-01-19 01:00:00',
+                            period2_start='2011-02-05 01:00:00',
+                            period2_end = '2011-02-19 01:00:00',
+                            period3_start = '2011-01-02 01:00:00',
+                            period3_end = '2011-03-08 01:00:00')
+
+    # 2. second step is to stiche four graphs we draw in first step
+    image1 = 'draw_count_hours.jpeg'
+    image2 = 'draw_stack_three_week_weekend.jpeg'
+    image3 = 'draw_two_count_hours.jpeg'
+    image4 = 'draw_three_week_weekend.jpeg'
+
+    catchfourpictures_horizon(image1, image2, image3, image4)
+
+    # add text to report
+    header = word
+    font_type = '/System/Library/Fonts/STHeiti Light.ttc'
+    font_medium_type = '/System/Library/Fonts/STHeiti Medium.ttc'
+    header_font = ImageFont.truetype(font_medium_type, 250)
+    font = ImageFont.truetype(font_type, 24)
+    color = "#000000"
+
+    img = 'report.jpeg'
+
+    catchblankpictures(img)
+
+    img = 'report.jpeg'
+    new_img = 'report.jpeg'
+    image = Image.open(img)
+    draw = ImageDraw.Draw(image)
+    width, height = image.size
+    header_x = 100
+    header_y = 100
+    draw.text((header_x, header_y), u'%s' % header, color, header_font)
+
+    # save report
+    image.save(new_img, 'report.jpeg')
+
+
+#test method for draw static visulation graphs
