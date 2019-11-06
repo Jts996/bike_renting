@@ -47,9 +47,10 @@ $( "#return-bike" ).click(function( event ) {
         type:'POST',
         url: '/api/return_bike',
         data: JSON.stringify({
-            order_id: $('#order-id-return').val(),bike_id:$('#bike-id-return').val()
+            order_id: $('#order-id-return').val(),bike_id:$('#bike-id-return').val(),
+            station_id:$('#location-ID-return').val()
             }),
-        success: function(data){alert(data.retstatus + ' deducted amount: ' + data.amount) ;
+        success: function(data){alert(data.retstatus + ' paid  amount: ' + data.amount + ' for duration ' + data.duration + 'minutes') ;
             $('#order-id-return').val('');
             $('#bike-id-return').val('');
             $('#bike-id-rent').val('');

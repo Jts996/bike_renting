@@ -69,8 +69,9 @@
                 <input id="order-id-return" hidden type="text" value= "{{orderid}}" placeholder="Defect Category">
                 <input id="bike-id-return" type="text" readonly  value="{{bikeid}}" placeholder="Bike ID Number">
                 <select id="location-ID-return">
-                    <option value="1">Finnieston</option>
-                    <option value="2">Dumbreck</option>
+                    {% for k in stat %}
+                    <option value="{{k}}">{{stat[k]}}</option>
+                    {% endfor %}
                 </select>
                 <button id="return-bike">Return</button>
             </div>
