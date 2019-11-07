@@ -392,3 +392,15 @@ def showBikeStations():
     except:
         print("showBikeStations error")
         return None
+
+#manager
+def createDate(startdate,enddate):
+   try:
+        cur = get_db().cursor()
+        cur.execute("""INSERT INTO datepick (startdate,enddate)
+         VALUES (?,?)""", (startdate,enddate))
+        get_db().commit()
+        return True
+    except:
+        print("Fail to update personal info")
+        return False
