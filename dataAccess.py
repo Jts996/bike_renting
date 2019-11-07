@@ -395,7 +395,7 @@ def showBikeStations():
 
 #manager
 def createDate(startdate,enddate):
-   try:
+    try:
         cur = get_db().cursor()
         cur.execute("""INSERT INTO datepick (startdate,enddate)
          VALUES (?,?)""", (startdate,enddate))

@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, send_file, jsonify, session, redirect, url_for
 from . import app
 from . import dataAccess as mydb
 
@@ -301,7 +301,7 @@ def showmanagerHome():
     return render_template('manager/manager.html')
 
 
-@app.route('/manager/producereport', methods=['POST'])
+@app.route('/manager/producereport', methods=['POST', 'GET'])
 def produecereport():
     print('ative drawing')
     req = request.get_json()
@@ -321,12 +321,15 @@ def produecereport():
     # print(word)
     # print(startTime)
     # print(endTime)
-    Visual.produceReport(startTime,endTime,startTime1,endTime1,startTime2,endTime2,startTime3,endTime3,
-                  startTime4,endTime4,startTime5,endTime5,word)
-    #Visual.produceReport()
+    #Visual.produceReport(startTime,endTime,startTime1,endTime1,startTime2,endTime2,startTime3,endTime3,startTime4,endTime4,startTime5,endTime5,word)
+    Visual.produceReport()
     #np.savetxt('test.txt',startTime)
+    # print("Downloading File")
+    #send_file("/report.jpeg", as_attachment=True)
     if not req:
-        return jsonify({'error' : 'Missing data!'})
+        return jsonify({'error': 'Missing data!'})
+
+
     return redirect(url_for('showmanagerHome'))
 
 #render defectinfo page
