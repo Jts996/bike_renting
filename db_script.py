@@ -4,7 +4,7 @@ with sqlite3.connect("bikerenting.db") as db:
 	cursor=db.cursor()
 
 #users table contains user registration and authentication information
-cursor.execute("""CREATE TABLE IF NOT EXISTS "users" (
+cursor.execute("""CREATE TABLE IF NOT EXISTS users (
 	"user_id"	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"email"	INTEGER NOT NULL UNIQUE,
 	"phone_number"	INTEGER,
@@ -27,7 +27,7 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS "users" (
 #2-operator
 #3-manager
 
-cursor.execute("""CREATE TABLE IF NOT EXISTS "user_roles" (
+cursor.execute("""CREATE TABLE IF NOT EXISTS user_roles (
 	"role_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"description"	TEXT
 );""")
@@ -58,6 +58,7 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS "bikes" (
 #bike_stations table contains bike station info. including it's location, bikes are parked there before RETURN action
 cursor.execute("""CREATE TABLE IF NOT EXISTS "bike_stations" (
 	"station_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"name" TEXT,
 	"post_code"	TEXT,
 	"loc_lat"	REAL NOT NULL,
 	"loc_long"	REAL NOT NULL,
@@ -117,10 +118,11 @@ cursor.execute("""INSERT INTO user_roles (role_id, description) VALUES (1, 'Cust
 				(3, 'Manager')""")
 
 #bike stations testing data loading
-cursor.execute("""INSERT INTO bike_stations (station_id,post_code,loc_lat,loc_long,bike_rack_number) VALUES (1, 'G40BA',55.86729,-4.25006,10),
-				(2, 'G25RJ',55.86248,-4.26362,15),
-				(3, 'G11XQ',55.86125,-4.24471,8),
-				(4, 'G59TA',55.85254,-4.25184,20)""")
+cursor.execute("""INSERT INTO bike_stations (station_id,name,post_code,loc_lat,loc_long,bike_rack_number) VALUES (1,'Cowcaddens','G40BA',55.86729,-4.25006,10),
+				(2,'Blythswood Hill','G25RJ',55.86248,-4.26362,8),
+				(3, 'Merchant City', 'G11XQ',55.86125,-4.24471,8),
+				(4,'Gorbals','G59TA',55.85254,-4.25184,20),
+				(5,'Hillhead','G128AF',55.8756,-4.291,10)""")
 
 #bikes testing data loading
 cursor.execute("""INSERT INTO bikes (bike_id,status,parked_bike_station,loc_lat,loc_long) VALUES (1001,'A',1,55.86729,-4.25006),
