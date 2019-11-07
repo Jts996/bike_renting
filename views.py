@@ -305,25 +305,25 @@ def showmanagerHome():
 def produecereport():
     print('ative drawing')
     req = request.get_json()
-    # word = req['megs']
-    # startTime = req['startTime']
-    # endTime = req['endTime']
-    # startTime1 = req['startTime1']
-    # endTime1 = req['endTime1']
-    # startTime2 = req['startTime2']
-    # endTime2 = req['endTime2']
-    # startTime3 = req['startTime3']
-    # endTime3 = req['endTime3']
-    # startTime4 = req['startTime4']
-    # endTime4 = req['endTime4']
-    # startTime5 = req['startTime5']
-    # endTime5 = req['endTime5']
+    word = str(req['megs'])
+    startTime = str(req['startTime'])
+    endTime = str(req['endTime'])
+    startTime1 = req['startTime1']
+    endTime1 = str(req['endTime1'])
+    startTime2 = str(req['startTime2'])
+    endTime2 = str(req['endTime2'])
+    startTime3 = str(req['startTime3'])
+    endTime3 = str(req['endTime3'])
+    startTime4 = str(req['startTime4'])
+    endTime4 = str(req['endTime4'])
+    startTime5 = str(req['startTime5'])
+    endTime5 = str(req['endTime5'])
     # print(word)
     # print(startTime)
     # print(endTime)
-    # Visual.produceReport(startTime,endTime,startTime1,endTime1,startTime2,endTime2,startTime3,endTime3,
-    #               startTime4,endTime4,startTime5,endTime5,word)
-    Visual.produceReport()
+    Visual.produceReport(startTime,endTime,startTime1,endTime1,startTime2,endTime2,startTime3,endTime3,
+                  startTime4,endTime4,startTime5,endTime5,word)
+    #Visual.produceReport()
     #np.savetxt('test.txt',startTime)
     if not req:
         return jsonify({'error' : 'Missing data!'})

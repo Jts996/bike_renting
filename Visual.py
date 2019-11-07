@@ -103,8 +103,9 @@ def produceReport(period1_start='2011-01-01 01:00:00',
     visual_method.draw_count_hours(df)
     visual_method.draw_two_count_hours(df, df2)
     visual_method.draw_week_weekend_count(df)
-    visual_method.draw_three_week_weekend(df2, period1_start, period1_end, period2_start, period2_end, period3_start, period3_end)
-    visual_method.draw_stack_three_week_weekend(df2, period4_start, period4_end, period5_start, period5_end, period6_start, period6_end,)
+
+    visual_method.draw_stack_three_week_weekend(df, period4_start, period4_end, period5_start, period5_end,period6_start, period6_end)
+    visual_method.draw_stack_three_week_weekend(df, period1_start, period1_end, period2_start, period2_end, period3_start,period3_end)
 
     # 2. second step is to stiche four graphs we draw in first step
     image1 = 'draw_count_hours.jpeg'
