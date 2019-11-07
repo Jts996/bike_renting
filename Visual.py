@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from visual_method import *
+from . import visual_method
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 #test data
@@ -80,7 +80,19 @@ def catchblankpictures(img):
 
 
 
-def produceReport(period1_start,period1_end,period2_start,period2_end,period3_start,period3_end,word="Dear manager, here is final report for you between period you choose. "):
+def produceReport(period1_start='2011-01-01 01:00:00',
+                            period1_end='2011-01-19 01:00:00',
+                            period2_start='2011-02-05 01:00:00',
+                            period2_end = '2011-02-19 01:00:00',
+                            period3_start = '2011-01-02 01:00:00',
+                            period3_end = '2011-03-08 01:00:00',
+                            period4_start = '2011-01-02 01:00:00',
+                            period4_end='2011-01-19 01:00:00',
+                            period5_start='2011-02-05 01:00:00',
+                            period5_end = '2011-02-19 01:00:00',
+                            period6_start = '2011-01-02 01:00:00',
+                            period6_end = '2011-03-08 01:00:00',
+                  word="Dear manager, here is final report for you between period you choose. "):
     # 1. fisrt step draw five graphs with data from csv files or database
     # load data from dataset
     original_data = pd.read_csv('train.csv')
@@ -88,21 +100,11 @@ def produceReport(period1_start,period1_end,period2_start,period2_end,period3_st
     df = original_data.loc[:6000]
     df2 = original_data.loc[:10000]
 
-    draw_count_hours(df)
-    draw_two_count_hours(df, df2)
-    draw_week_weekend_count(df)
-    draw_three_week_weekend(df, period1_start='2011-01-01 01:00:00',
-                            period1_end='2011-01-19 01:00:00',
-                            period2_start='2011-02-05 01:00:00',
-                            period2_end = '2011-02-19 01:00:00',
-                            period3_start = '2011-01-02 01:00:00',
-                            period3_end = '2011-03-08 01:00:00')
-    draw_stack_three_week_weekend(df, period1_start='2011-01-01 01:00:00',
-                            period1_end='2011-01-19 01:00:00',
-                            period2_start='2011-02-05 01:00:00',
-                            period2_end = '2011-02-19 01:00:00',
-                            period3_start = '2011-01-02 01:00:00',
-                            period3_end = '2011-03-08 01:00:00')
+    visual_method.draw_count_hours(df)
+    visual_method.draw_two_count_hours(df, df2)
+    visual_method.draw_week_weekend_count(df)
+    visual_method.draw_three_week_weekend(df2, period1_start, period1_end, period2_start, period2_end, period3_start, period3_end)
+    visual_method.draw_stack_three_week_weekend(df2, period4_start, period4_end, period5_start, period5_end, period6_start, period6_end,)
 
     # 2. second step is to stiche four graphs we draw in first step
     image1 = 'draw_count_hours.jpeg'
@@ -134,7 +136,8 @@ def produceReport(period1_start,period1_end,period2_start,period2_end,period3_st
     draw.text((header_x, header_y), u'%s' % header, color, header_font)
 
     # save report
-    image.save(new_img, 'report.jpeg')
+    image.save(new_img, 'jpeg')
 
 
 #test method for draw static visulation graphs
+#produceReport(word = 'good day')

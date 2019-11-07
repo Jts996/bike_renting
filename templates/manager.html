@@ -18,170 +18,156 @@
 	<script type="text/javascript" src="manager/jquery/manager.js"></script>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col25">
-				<h4> TOTAL COUNT WITH ONE PERIOD</h4>
-				<p> This displays Line Graph </p>
-			</div>
-			<div class="col75">
-				<input type="checkbox" class="check">
-				<span class="checked"></span>
-			</div>
-		</div>
-		<div class="date">
-			<div class="start">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker" >
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-		</div>
-		<div class="row1">
-			<div class="col25">
-				<h4> TOTAL COUNT WITH TWO PERIODS</h4>
-				<p> This displays Line Graph </p>
-			</div>
-			<div class="col75">
-				<input type="checkbox" class="check">
-				<span class="checked"></span>
-			</div>
-		</div>
-		<div class="date1">
-			<div class="start">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="start1">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end1">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-		</div>
-		<div class="row2">
-			<div class="col25">
-				<h4> TOTAL COUNT WITH THREE PERIODS</h4>
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+      <h1>Report</h1>
+      <hr>
+
+      <div class="mb-3">
+
+         <h4> You can add message here to report</h4>
+         <div class="form-group">
+          <label>Message</label>
+          <textarea class="form-control" id="message" cols="30" rows="3" placeholder="Your message"></textarea>
+        </div>
+
+
+
+        <div class="form-group">
+            <h4> TOTAL COUNT WITH THREE PERIODS</h4>
 				<p> This displays Bar Graph </p>
-			</div>
-			<div class="col75">
-				<input type="checkbox" class="check">
-				<span class="checked"></span>
-			</div>
-		</div>
-		<div class="date2">
-			<div class="start">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="start1">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end1">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="start2">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end2">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-		</div>
-		<div class="row3">
-			<div class="col25">
-				<h4> TOTAL COUNT WITH ONE PERIOD</h4>
-				<p> This displays Bar Graph </p>
-			</div>
-			<div class="col75">
-				<input type="checkbox" class="check">
-				<span class="checked"></span>
-			</div>
-		</div>
-		<div class="date3">
-			<div class="start">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-		</div>
-		<div class="row4">
-			<div class="col25">
-				<h4> TOTAL COUNT WITH THREE PERIODS</h4>
-				<p> This displays Stack-Bar Graph </p>
-			</div>
-			<div class="col75">
-				<input type="checkbox" class="check">
-				<span class="checked"></span>
-			</div>
-		</div>
-		<div class="date4">
-			<div class="start">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="start1">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end1">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="start2">
-				<label>Start Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-			<div class="end2">
-				<label>End Date:</label>
-				<input type="text" placeholder="yyyy-mm-dd" class="datepicker">
-				<i class="far fa-calendar-alt" id="cal"></i>
-			</div>
-		</div>
-		<div>
-			<button class="btn"><i class="fas fa-download"></i>  DOWNLOAD</button>
-		</div>
-	</div>
+          <label>startTime</label>
+          <input type="text" class="form-control" id="startTime" placeholder="yyyy-mm-dd">
+        </div>
+
+        <div class="form-group">
+          <label>endTime</label>
+          <input type="text" class="form-control" id="endTime"  placeholder="endTime">
+        </div>
+
+          <div class="form-group">
+          <label>startTime1</label>
+          <input type="text" class="form-control" id="startTime1" placeholder="startTime1">
+        </div>
+
+        <div class="form-group">
+          <label>endTime1</label>
+          <textarea class="form-control" id="endTime1"  placeholder="endTime1"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>startTime2</label>
+          <input type="text" class="form-control" id="startTime2" placeholder="startTime2">
+        </div>
+
+        <div class="endTime2">
+          <label>endTime2</label>
+          <textarea class="form-control" id="endTime2"  placeholder="endTime2"></textarea>
+        </div>
+
+
+        <h4> TOTAL COUNT WITH ONE PERIOD</h4>
+          <p> This displays StackBar Graph </p>
+
+        <label>startTime</label>
+          <input type="text" class="form-control" id="startTime3" placeholder="startTime">
+        </div>
+
+        <div class="form-group">
+          <label>endTime</label>
+          <input type="text" class="form-control" id="endTime3"  placeholder="endTime">
+        </div>
+
+          <div class="form-group">
+          <label>startTime1</label>
+          <input type="text" class="form-control" id="startTime4" placeholder="startTime">
+        </div>
+
+        <div class="form-group">
+          <label>endTime1</label>
+          <textarea class="form-control" id="endTime4"  placeholder="endTime"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>startTime2</label>
+          <input type="text" class="form-control" id="startTime5" placeholder="startTime">
+        </div>
+
+        <div class="form-group">
+          <label>endTime2</label>
+          <textarea class="form-control" id="endTime5"  placeholder="endTime"></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="button" onclick="submit_message();">Submit all</button>
+      </div>
+
+
+
+      <div class="mb-3" id="messages"></div>
+
+    </div>
+  </div>
+</div>
+
+
+    <script>
+
+function submit_message() {
+
+    var startTime = document.getElementById("startTime");
+    var endTime = document.getElementById("endTime");
+    var startTime1 = document.getElementById("startTime1");
+    var endTime1 = document.getElementById("endTime1");
+    var startTime2 = document.getElementById("startTime2");
+    var endTime2 = document.getElementById("endTime2");
+    var startTime3 = document.getElementById("startTime3");
+    var endTime3 = document.getElementById("endTime3");
+    var startTime4 = document.getElementById("startTime4");
+    var endTime4 = document.getElementById("endTime4");
+    var startTime5 = document.getElementById("startTime5");
+    var endTime5 = document.getElementById("endTime5");
+
+    var date = {
+      startTime : startTime.value,
+      endTime: endTime.value,
+      startTime1 : startTime1.value,
+      endTime1: endTime1.value,
+      startTime2 : startTime2.value,
+      endTime2: endTime2.value,
+      startTime3 : startTime3.value,
+      endTime3: endTime3.value,
+      startTime4 : startTime4.value,
+      endTime4: endTime4.value,
+      startTime5 : startTime5.value,
+      endTime5: endTime5.value,
+    };
+
+    fetch(' http://127.0.0.1:5000/process', {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(date),
+      cache: "no-cache",
+      url:  ' http://127.0.0.1:5000/process',
+      headers: new Headers({
+        "content-type": "application/json"
+      })
+    })
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.log(`Looks like there was a problem. Status code: ${response.status}`);
+          return;
+        }
+        response.json().then(function (data) {
+          console.log(data);
+        });
+      })
+      .catch(function (error) {
+        console.log("Fetch error: " + error);
+      });
+
+  }
+</script>
 </body>
 </html>

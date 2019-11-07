@@ -8,6 +8,7 @@ from flask import Flask,jsonify,render_template
 from . import malipulate_database
 from . import generateData_method
 from . import visual_method
+from . import Visual
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -297,8 +298,36 @@ def countall_year():
 # render index page for manager & also page for user to select date period and download custome report
 @app.route('/manager')
 def showmanagerHome():
-	return render_template('manager/manager.html')
+    return render_template('manager/manager.html')
 
+
+@app.route('/manager/producereport', methods=['POST'])
+def produecereport():
+    print('ative drawing')
+    req = request.get_json()
+    # word = req['megs']
+    # startTime = req['startTime']
+    # endTime = req['endTime']
+    # startTime1 = req['startTime1']
+    # endTime1 = req['endTime1']
+    # startTime2 = req['startTime2']
+    # endTime2 = req['endTime2']
+    # startTime3 = req['startTime3']
+    # endTime3 = req['endTime3']
+    # startTime4 = req['startTime4']
+    # endTime4 = req['endTime4']
+    # startTime5 = req['startTime5']
+    # endTime5 = req['endTime5']
+    # print(word)
+    # print(startTime)
+    # print(endTime)
+    # Visual.produceReport(startTime,endTime,startTime1,endTime1,startTime2,endTime2,startTime3,endTime3,
+    #               startTime4,endTime4,startTime5,endTime5,word)
+    Visual.produceReport()
+    #np.savetxt('test.txt',startTime)
+    if not req:
+        return jsonify({'error' : 'Missing data!'})
+    return redirect(url_for('showmanagerHome'))
 
 #render defectinfo page
 @app.route('/defectinfo')

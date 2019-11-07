@@ -72,6 +72,7 @@
       // Stop form from submitting normally
       $.ajax({
             type:'POST',
+            type:'POST',
             url: '/api/login',
             data: JSON.stringify({email: $('#inputEmail').val(),password: $('#inputPassword').val()}),
             success: function(data){ 
